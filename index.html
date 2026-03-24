@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موثوق | الواجهة الرئيسية</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: #030614;
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* ثوابت التصميم */
+        :root {
+            --primary: #2a7de1;
+            --primary-glow: rgba(42, 125, 225, 0.4);
+            --secondary: #9f7aea;
+            --dark-bg: #030614;
+            --glass-bg: rgba(18, 25, 45, 0.7);
+            --glass-border: rgba(74, 144, 226, 0.2);
+            --card-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* الخلفية الثابتة */
+        .fixed-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+        
+        .grid-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(42, 125, 225, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(42, 125, 225, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.3;
+        }
+        
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+        }
+        
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: rgba(42, 125, 225, 0.15);
+            top: -200px;
+            left: -200px;
+        }
+        
+        .orb-2 {
+            width: 600px;
+            height: 600px;
+            background: rgba(159, 122, 234, 0.1);
+            bottom: -300px;
+            right: -200px;
+        }
+        
+        /* شريط التقدم */
+        .scroll-progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, #2a7de1, #9f7aea);
+            z-index: 9999;
+            transition: width 0.1s;
+        }
+        
+        /* طبقة الأمان */
+        .safe-grid-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 20px 20px, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        /* رأس الصفحة */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(3, 6, 20, 0.6);
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff, #a0c8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+            position: relative;
+        }
+        
+        .nav-links a:hover {
+            color: #2a7de1;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #2a7de1;
+            transition: 0.3s;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn-outline {
+            padding: 8px 20px;
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            background: transparent;
+            color: #fff;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .btn-outline:hover {
+            border-color: #2a7de1;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+        
+        .btn-solid {
+            padding: 8px 25px;
+            border: none;
+            border-radius: 30px;
+            background: linear-gradient(135deg, #2a7de1, #1e5bbf);
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .btn-solid:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(42, 125, 225, 0.4);
+        }
+        
+        /* الخبير المتحرك */
+        .expert-wrapper {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            z-index: 1000;
+            display: flex;
+            align-items: flex-end;
+            gap: 15px;
+            transition: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .chat-bubble {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px 20px 20px 5px;
+            padding: 12px 20px;
+            max-width: 250px;
+            box-shadow: var(--card-shadow);
+            position: relative;
+        }
+        
+        .chat-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            right: 20px;
+            width: 15px;
+            height: 15px;
+            background: inherit;
+            border-right: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+            transform: rotate(45deg);
+            backdrop-filter: blur(10px);
+        }
+        
+        .character-visual {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .character-visual:hover {
+            transform: translateY(-10px) scale(1.05);
+        }
+        
+        #expert-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 20px rgba(42, 125, 225, 0.5));
+        }
+        
+        .platform-shadow {
+            position: absolute;
+            bottom: -5px;
+            left: 10%;
+            width: 80%;
+            height: 10px;
+            background: radial-gradient(ellipse at center, rgba(42, 125, 225, 0.3), transparent);
+            border-radius: 50%;
+            z-index: -1;
+        }
+        
+        /* الحاويات الرئيسية */
+        .scene {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 80px 0;
+        }
+        
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 40px;
+            width: 100%;
+        }
+        
+        .content-left {
+            display: flex;
+            justify-content: flex-start;
+        }
+        
+        .content-right {
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        /* البطاقات الزجاجية */
+        .glass-hero, .glass-hero-style {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 50px;
+            width: 100%;
+            max-width: 700px;
+            box-shadow: var(--card-shadow);
+            transition: 0.4s;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .glass-hero-style {
+            max-width: 800px;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .status-badge {
+            font-size: 48px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff, #a0c8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .glass-hero p {
+            color: #b0c0e0;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .btn-primary {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #2a7de1, #1e5bbf);
+            border: none;
+            border-radius: 50px;
+            color: #fff;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.3s;
+        }
+        
+        .btn-glass {
+            padding: 12px 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            color: #fff;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.3s;
+        }
+        
+        .btn-lift:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(42, 125, 225, 0.3);
+        }
+        
+        /* شبكة المميزات */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .feature-item {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            transition: 0.3s;
+            border: 1px solid transparent;
+        }
+        
+        .feature-item:hover {
+            border-color: var(--glass-border);
+            background: rgba(42, 125, 225, 0.05);
+        }
+        
+        .feature-item .icon {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .feature-item h4 {
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        
+        .feature-item p {
+            color: #8a9ac0;
+            font-size: 14px;
+        }
+        
+        .blue {
+            color: #2a7de1;
+        }
+        
+        /* بطاقات الخدمات */
+        .cards-stack {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .service-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 25px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 1px solid transparent;
+        }
+        
+        .service-card:hover {
+            border-color: var(--glass-border);
+            transform: translateY(-10px);
+            background: rgba(42, 125, 225, 0.1);
+        }
+        
+        .card-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            margin: 0 auto 20px;
+        }
+        
+        .bg-blue {
+            background: rgba(42, 125, 225, 0.2);
+            color: #2a7de1;
+        }
+        
+        .bg-purple {
+            background: rgba(159, 122, 234, 0.2);
+            color: #9f7aea;
+        }
+        
+        .bg-orange {
+            background: rgba(237, 137, 54, 0.2);
+            color: #ed8936;
+        }
+        
+        .service-card h3 {
+            margin-bottom: 10px;
+        }
+        
+        .service-card p {
+            color: #8a9ac0;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .arrow-link {
+            color: #2a7de1;
+            font-weight: 500;
+        }
+        
+        /* الخط الزمني */
+        .timeline-box {
+            width: 100%;
+        }
+        
+        .timeline-steps {
+            margin-top: 30px;
+        }
+        
+        .step {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 15px;
+            transition: 0.3s;
+        }
+        
+        .step:hover {
+            background: rgba(42, 125, 225, 0.1);
+        }
+        
+        .step-num {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(42, 125, 225, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            color: #2a7de1;
+        }
+        
+        .step-num.active {
+            background: #2a7de1;
+            color: #fff;
+        }
+        
+        .step-info h4 {
+            margin-bottom: 5px;
+        }
+        
+        .step-info p {
+            color: #8a9ac0;
+        }
+        
+        /* تسجيل مزدوج */
+        .wide-mode {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+        
+        .center-title {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 36px;
+        }
+        
+        .split-registration {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+        
+        .reg-card {
+            position: relative;
+            border-radius: 30px;
+            overflow: hidden;
+            min-height: 400px;
+            transition: 0.4s;
+        }
+        
+        .reg-card:hover {
+            transform: scale(1.02);
+        }
+        
+        .company-side .bg-layer {
+            background: linear-gradient(135deg, #1a2639, #0f1a2f);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.8;
+        }
+        
+        .client-side .bg-layer {
+            background: linear-gradient(135deg, #1f2937, #111827);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.8;
+        }
+        
+        .content-layer {
+            position: relative;
+            z-index: 2;
+            padding: 40px 30px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .icon-big {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+        
+        .check-list {
+            list-style: none;
+            margin: 20px 0 30px;
+        }
+        
+        .check-list li {
+            padding: 8px 0;
+            color: #b0c0e0;
+        }
+        
+        .check-list li::before {
+            content: "✓";
+            color: #2a7de1;
+            margin-left: 8px;
+        }
+        
+        .btn-solid.white {
+            background: #fff;
+            color: #000;
+            margin-top: auto;
+        }
+        
+        .btn-solid.dark {
+            background: #000;
+            color: #fff;
+            margin-top: auto;
+        }
+        
+        /* تذييل الصفحة */
+        .footer {
+            background: rgba(3, 6, 20, 0.9);
+            border-top: 1px solid var(--glass-border);
+            padding: 60px 40px 20px;
+            margin-top: 50px;
+        }
+        
+        .footer-content {
+            max-width: 1300px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+        }
+        
+        .footer-column h4 {
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        
+        .footer-column a {
+            display: block;
+            color: #8a9ac0;
+            text-decoration: none;
+            margin-bottom: 10px;
+            transition: 0.3s;
+        }
+        
+        .footer-column a:hover {
+            color: #2a7de1;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .social-links span {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .social-links span:hover {
+            background: #2a7de1;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 40px;
+            margin-top: 40px;
+            border-top: 1px solid var(--glass-border);
+            color: #8a9ac0;
+        }
+        
+        /* تجاوب */
+        @media (max-width: 992px) {
+            .cards-stack,
+            .split-registration,
+            .features-grid,
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .glass-hero, .glass-hero-style {
+                padding: 30px;
+            }
+            
+            .expert-wrapper {
+                bottom: 10px;
+                left: 10px;
+            }
+            
+            .character-visual {
+                width: 70px;
+                height: 70px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- رأس الصفحة -->
+    <header class="header">
+        <div class="logo">موثـوق</div>
+        <nav class="nav-links">
+            <a href="#hero">الرئيسية</a>
+            <a href="#about">لماذا موثوق</a>
+            <a href="#services">الخدمات</a>
+            <a href="#process">التوثيق</a>
+            <a href="#join">انضم الآن</a>
+        </nav>
+        <div class="auth-buttons">
+            <button class="btn-outline">دخول</button>
+            <button class="btn-solid">تسجيل</button>
+        </div>
+    </header>
+
+    <!-- العناصر الخلفية -->
+    <div id="floating-assets-container"></div>
+    <div class="fixed-background">
+        <div class="grid-overlay"></div>
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+    <div class="safe-grid-layer"></div>
+    <div class="scroll-progress-bar"></div>
+
+    <!-- الخبير المتحرك -->
+    <div id="expert-container" class="expert-wrapper">
+        <div class="chat-bubble">
+            <span id="bubble-text">أهلاً بك.. لنبدأ الرحلة!</span>
+        </div>
+        <div class="character-visual">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%232a7de1' opacity='0.2'/%3E%3Ccircle cx='50' cy='40' r='20' fill='%232a7de1' opacity='0.3'/%3E%3Ccircle cx='50' cy='35' r='15' fill='%239f7aea' opacity='0.4'/%3E%3Ctext x='50' y='70' text-anchor='middle' fill='white' font-family='Tajawal' font-size='12'%3Eخبير%3C/text%3E%3C/svg%3E" alt="Expert" id="expert-img">
+            <div class="platform-shadow"></div>
+        </div>
+    </div>
+
+    <!-- القسم الرئيسي -->
+    <section id="hero" class="scene">
+        <div class="container content-left">
+            <div class="hero-box glass-hero">
+                <div class="hero-icons"></div>
+                <h1 class="status-badge pulse">موثوق</h1>
+                <p>موثوق هي منصة رقمية مبتكرة تجمع بين الرقابة الميدانية والتوثيق الرقمي لخلق بيئة تجارية آمنة وشفافة تضمن حقوق التاجر والمورد.</p>
+                <p>تعمل المنصة على توثيق الاتفاقيات والالتزامات التجارية بالأدلة الرقمية والتقارير الميدانية، مما يقلل النزاعات ويعزز الثقة بين الأطراف.</p>
+                <p>ومن خلال أدوات متابعة وتقارير ذكية، تسهم "موثوق" في رفع مستوى المصداقية، حماية الحقوق، ودعم استدامة العلاقات التجارية.</p>
+                <div class="btn-group">
+                    <a href="#services" class="btn-primary btn-lift">استكشف الخدمات</a>
+                    <a href="#" class="btn-glass btn-lift">إستكشاف المنتجات</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم لماذا موثوق -->
+    <section id="about" class="scene">
+        <div class="container content-right">
+            <div class="glass-hero-style">
+                <div class="hero-icons-style"></div>
+                <h2>لماذا <span class="blue">موثوق</span>؟</h2>
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <span class="icon">🛡️</span>
+                        <h4>حماية قانونية</h4>
+                        <p>عقود إلكترونية ملزمة.</p>
+                    </div>
+                    <div class="feature-item">
+                        <span class="icon">👁️</span>
+                        <h4>فحص ميداني</h4>
+                        <p>زيارات واقعية للمخازن.</p>
+                    </div>
+                    <div class="feature-item">
+                        <span class="icon">💸</span>
+                        <h4>ضمان مالي</h4>
+                        <p>حجز المبلغ حتى الاستلام.</p>
+                    </div>
+                    <div class="feature-item">
+                        <span class="icon">🚀</span>
+                        <h4>سرعة إنجاز</h4>
+                        <p>توثيق في 24 ساعة.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم بوابات الأعمال -->
+    <section id="services" class="scene">
+        <div class="container content-left">
+            <div class="glass-hero-style">
+                <div class="hero-icons-style"></div>
+                <h2>بوابات الأعمال</h2>
+                <div class="cards-stack">
+                    <div class="service-card tilt-card" onclick="window.location='#'">
+                        <div class="card-icon bg-blue">📦</div>
+                        <h3>المنتجات</h3>
+                        <p>تصفح آلاف المنتجات الموثقة والمفحوصة.</p>
+                        <span class="arrow-link">تصفح ↗</span>
+                    </div>
+                    <div class="service-card tilt-card">
+                        <div class="card-icon bg-purple">📑</div>
+                        <h3>الفئات</h3>
+                        <p>دليل شامل للقطاعات الصناعية والتجارية.</p>
+                        <span class="arrow-link">استكشف ↗</span>
+                    </div>
+                    <div class="service-card tilt-card">
+                        <div class="card-icon bg-orange">🤝</div>
+                        <h3>الخدمات</h3>
+                        <p>ربط مباشر مع مزودي الخدمات اللوجستية.</p>
+                        <span class="arrow-link">اطلب ↗</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم رحلة التوثيق -->
+    <section id="process" class="scene">
+        <div class="container content-right">
+            <div class="glass-hero-style">
+                <div class="hero-icons-style"></div>
+                <div class="timeline-box">
+                    <h2>رحلة التوثيق</h2>
+                    <div class="timeline-steps">
+                        <div class="step">
+                            <div class="step-num">01</div>
+                            <div class="step-info">
+                                <h4>الطلب</h4>
+                                <p>ارفع طلب التوثيق عبر المنصة.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-num">02</div>
+                            <div class="step-info">
+                                <h4>الإستلام</h4>
+                                <p>يستلم فريق المنصة البيانات .</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-num">03</div>
+                            <div class="step-info">
+                                <h4>الفحص</h4>
+                                <p>يقوم مشرفون مختصون بمراجعة دقة البيانات.</p>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step-num active">04</div>
+                            <div class="step-info">
+                                <h4>القرار</h4>
+                                <p>يتم التقرير إذا ماكان موثوق ام لا.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم الإنضمام -->
+    <section id="join" class="scene">
+        <div class="content-box left-align wide-mode">
+            <h2 class="center-title">اختر مسارك المهني</h2>
+            <div class="split-registration">
+                <div class="reg-card company-side">
+                    <div class="bg-layer"></div>
+                    <div class="content-layer">
+                        <div class="icon-big">🏢</div>
+                        <h3>قطاع الأعمال</h3>
+                        <p>للموردين، المصانع، ومزودي الخدمات.</p>
+                        <ul class="check-list">
+                            <li>لوحة تحكم التاجر</li>
+                            <li>ادارة المخزون</li>
+                        </ul>
+                        <button class="btn-solid white">تسجيل شركة</button>
+                    </div>
+                </div>
+                <div class="reg-card client-side">
+                    <div class="bg-layer"></div>
+                    <div class="content-layer">
+                        <div class="icon-big">👤</div>
+                        <h3>الأفراد والعملاء</h3>
+                        <p>للمشترين، الباحثين عن خدمات، والمستقلين.</p>
+                        <ul class="check-list">
+                            <li>حماية المدفوعات</li>
+                            <li>تتبع الطلبات</li>
+                        </ul>
+                        <button class="btn-solid dark">تسجيل عميل</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- تذييل الصفحة -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-column">
+                <h4>موثوق</h4>
+                <a href="#">عن المنصة</a>
+                <a href="#">الشروط والأحكام</a>
+                <a href="#">سياسة الخصوصية</a>
+            </div>
+            <div class="footer-column">
+                <h4>روابط سريعة</h4>
+                <a href="#about">لماذا موثوق</a>
+                <a href="#services">الخدمات</a>
+                <a href="#process">التوثيق</a>
+            </div>
+            <div class="footer-column">
+                <h4>الدعم</h4>
+                <a href="#">الأسئلة الشائعة</a>
+                <a href="#">تواصل معنا</a>
+                <a href="#">الدعم الفني</a>
+            </div>
+            <div class="footer-column">
+                <h4>تابعنا</h4>
+                <div class="social-links">
+                    <span>في</span>
+                    <span>ت</span>
+                    <span>ان</span>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2024 موثوق - جميع الحقوق محفوظة
+        </div>
+    </footer>
+
+    <script>
+        // شريط التقدم عند التمرير
+        window.addEventListener('scroll', function() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.querySelector('.scroll-progress-bar').style.width = scrolled + '%';
+        });
+
+        // تغيير رسالة الخبير عند التمرير للأقسام
+        const sections = document.querySelectorAll('.scene');
+        const expertImg = document.getElementById('expert-img');
+        const bubbleText = document.getElementById('bubble-text');
+
+        const messages = {
+            'hero': 'مرحباً بك في موثوق',
+            'about': 'لماذا نحن',
+            'services': 'لدينا فئات شبه كاملة',
+            'process': 'طريقة توثيق الشركات',
+            'join': 'هل قررت الإنضمام'
+        };
+
+        window.addEventListener('scroll', function() {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 300) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            if (messages[current]) {
+                bubbleText.textContent = messages[current];
+            }
+        });
+
+        // تأثيرات إضافية
+        document.querySelectorAll('.tilt-card').forEach(card => {
+            card.addEventListener('mousemove', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const angleX = (y - centerY) / 20;
+                const angleY = (centerX - x) / 20;
+                this.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg) scale3d(1.02, 1.02, 1.02)`;
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+            });
+        });
+    </script>
+</body>
+                                          </html>
